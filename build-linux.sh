@@ -50,7 +50,8 @@ cmake opencv "$OPENCV_DIR" -B build_$1 \
   -DBUILD_opencv_stitching=OFF \
   -DBUILD_opencv_video=OFF \
   -DBUILD_opencv_videoio=OFF \
-  -DWITH_PNG=OFF \
+  -DWITH_PNG=ON \
+  -DWITH_AVIF=OFF \
   -DWITH_JPEG=OFF \
   -DWITH_TIFF=OFF \
   -DWITH_WEBP=OFF \
