@@ -5,6 +5,7 @@ CONFIG="${1?}"
 VERSION="${2?}"
 
 cmake opencv -B build_$1 \
+  -GXcode \
   -DCMAKE_INSTALL_PREFIX=/usr/local \
   -DCMAKE_BUILD_TYPE=$1 \
   -DOPENCV_FORCE_3RDPARTY_BUILD=ON \
