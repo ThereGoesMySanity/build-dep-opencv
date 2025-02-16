@@ -81,9 +81,9 @@ cmake opencv -B build_$1 \
 cmake --build "build_$CONFIG"
 cmake --install "build_$CONFIG" --prefix "release/$CONFIG"
 
-cmake opencv/3rdparty/libpng -B build_libpng_arm -DCMAKE_OSX_ARCHITECTURES="arm64"
+cmake opencv -B build_$CONFIG -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
 cmake --build build_libpng_arm
-lipo -create build_libpng_arm/liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a -output ./liblibpng.a
+lipo -create build_libpng_arm/lib/opencv4/3rdparty/liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a -output ./liblibpng.a
 mv ./liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
 lipo -info release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
 
