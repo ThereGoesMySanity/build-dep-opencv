@@ -52,7 +52,7 @@ cmake opencv -B build_$1 \
   -DBUILD_opencv_stitching=OFF \
   -DBUILD_opencv_video=OFF \
   -DBUILD_opencv_videoio=OFF \
-  -DWITH_PNG=ON \
+  -DWITH_PNG=OFF \
   -DWITH_AVIF=OFF \
   -DWITH_JPEG=OFF \
   -DWITH_TIFF=OFF \
@@ -81,11 +81,11 @@ cmake opencv -B build_$1 \
 cmake --build "build_$CONFIG"
 cmake --install "build_$CONFIG" --prefix "release/$CONFIG"
 
-cmake opencv -B build_$CONFIG -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-cmake --build build_$CONFIG
-lipo -create build_$CONFIG/lib/liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a -output ./liblibpng.a
-mv ./liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
-lipo -info release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
+# cmake opencv -B build_$CONFIG -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
+# cmake --build build_$CONFIG
+# lipo -create build_$CONFIG/lib/liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a -output ./liblibpng.a
+# mv ./liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
+# lipo -info release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
 
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
 
