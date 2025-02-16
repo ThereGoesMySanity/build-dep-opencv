@@ -97,7 +97,7 @@ for file in $(find); do
   if [[ -d "$file" ]]; then
     mkdir "../../release/$CONFIG/$file"
   elif [[ "$file" =~ \\.a$ ]]
-    lipo -create "$file" "../../release/$CONFIG/$file" -output "../../release/$CONFIG/$file"
+    lipo -create "$file" "../../release-x86/$CONFIG/$file" -output "../../release/$CONFIG/$file"
   else
     cp $file "../../release/$CONFIG/$file"
   fi
