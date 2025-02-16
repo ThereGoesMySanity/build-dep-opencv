@@ -82,6 +82,5 @@ cmake opencv -B build_$1 \
 cmake --build "build_$CONFIG" --config $CONFIG
 cmake --install "build_$CONFIG" --prefix "release/$CONFIG"
 
-cmake -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
 
