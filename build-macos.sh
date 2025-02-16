@@ -158,7 +158,7 @@ cmake --install "build_arm_$CONFIG" --prefix "release-arm/$CONFIG"
 mkdir "release"
 mkdir "release/$CONFIG"
 cd "release-arm/$CONFIG"
-for file in $(find); do
+for file in $(find .); do
   echo Combining $file
   if [[ -d "$file" ]]; then
     mkdir "../../release/$CONFIG/$file"
