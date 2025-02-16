@@ -80,7 +80,7 @@ cmake opencv -B build_$1 \
   -DWITH_IPP=OFF
 
 cmake --build "build_$CONFIG" --config $CONFIG
-cmake --install "build_$CONFIG" --prefix "release/$CONFIG"
+cmake --install "build_$CONFIG" --prefix "release/$CONFIG" --config $CONFIG
 
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
 
