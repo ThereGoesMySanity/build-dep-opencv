@@ -8,6 +8,7 @@ cmake opencv -B build_$1 \
   -GXcode \
   -DCMAKE_INSTALL_PREFIX=/usr/local \
   -DCMAKE_BUILD_TYPE=$1 \
+  -DBUILD_TYPE=$1 \
   -DOPENCV_FORCE_3RDPARTY_BUILD=ON \
   -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0 \
   -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" \
@@ -78,7 +79,9 @@ cmake opencv -B build_$1 \
   -DWITH_OPENCL=OFF \
   -DWITH_IPP=OFF
 
-cmake --build "build_$CONFIG"
+cmake --build "build_$CONFIG" --config $CONFIG
 cmake --install "build_$CONFIG" --prefix "release/$CONFIG"
+
+cmake -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
 
