@@ -3,14 +3,11 @@ set -euo pipefail
 
 CONFIG="${1?}"
 VERSION="${2?}"
-
-cmake opencv -B build_$1 \
+CMAKE_ARGS=<<EOS
   -DCMAKE_INSTALL_PREFIX=/usr/local \
   -DCMAKE_BUILD_TYPE=$1 \
-  -DBUILD_TYPE=$1 \
   -DOPENCV_FORCE_3RDPARTY_BUILD=ON \
   -DCMAKE_OSX_DEPLOYMENT_TARGET=15.0 \
-  -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64" \
   -DBUILD_SHARED_LIBS=OFF \
   -DBUILD_opencv_apps=OFF \
   -DBUILD_opencv_js=OFF \
@@ -52,7 +49,7 @@ cmake opencv -B build_$1 \
   -DBUILD_opencv_stitching=OFF \
   -DBUILD_opencv_video=OFF \
   -DBUILD_opencv_videoio=OFF \
-  -DWITH_PNG=OFF \
+  -DWITH_PNG=ON \
   -DWITH_AVIF=OFF \
   -DWITH_JPEG=OFF \
   -DWITH_TIFF=OFF \
@@ -77,15 +74,36 @@ cmake opencv -B build_$1 \
   -DWITH_ITT=OFF \
   -DWITH_OPENCL=OFF \
   -DWITH_IPP=OFF
+EOS
 
-cmake --build "build_$CONFIG"
-cmake --install "build_$CONFIG" --prefix "release/$CONFIG"
+cmake opencv -B build_x86_$1 \
+  -DCMAKE_OSX_ARCHITECTURES="x86_64" \
+  $CMAKE_ARGS
+cmake --build "build_x86_$CONFIG"
+cmake --install "build_x86_$CONFIG" --prefix "release-x86/$CONFIG"
 
-# cmake opencv -B build_$CONFIG -DCMAKE_OSX_ARCHITECTURES="arm64;x86_64"
-# cmake --build build_$CONFIG
-# lipo -create build_$CONFIG/lib/liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a -output ./liblibpng.a
-# mv ./liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
-# lipo -info release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
+cmake opencv -B build_arm_$1 \
+  -DCMAKE_OSX_ARCHITECTURES="arm64" \
+  $CMAKE_ARGS
+cmake --build "build_arm_$CONFIG"
+cmake --install "build_arm_$CONFIG" --prefix "release-arm/$CONFIG"
+
+
+mkdir "release"
+mkdir "release/$CONFIG"
+cd "release-arm/$CONFIG"
+for file in $(find); do
+  echo Combining $file
+  if [[ -d "$file" ]]; then
+    mkdir "../../release/$CONFIG/$file"
+  elif [[ "$file" =~ \\.a$ ]]
+    lipo -create "$file" "../../release/$CONFIG/$file" -output "../../release/$CONFIG/$file"
+  else
+    cp $file "../../release/$CONFIG/$file"
+  fi
+done
+cd ../..
+
 
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
 
