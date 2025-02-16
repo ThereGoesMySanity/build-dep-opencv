@@ -3,7 +3,7 @@ set -euo pipefail
 
 CONFIG="${1?}"
 VERSION="${2?}"
-CMAKE_ARGS=<<EOS
+read -r -d '' CMAKE_ARGS <<EOS
   -DCMAKE_INSTALL_PREFIX=/usr/local \
   -DCMAKE_BUILD_TYPE=$1 \
   -DOPENCV_FORCE_3RDPARTY_BUILD=ON \
