@@ -15,7 +15,7 @@ concurrency:
   cancel-in-progress: "${{ github.ref != 'refs/heads/main' }}"
 
 env:
-  OPENCV_VERSION: "4.9.0"
+  OPENCV_VERSION: "4.11.0"
 
 jobs:
   BuildMac:
