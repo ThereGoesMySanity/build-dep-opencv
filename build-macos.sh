@@ -5,7 +5,6 @@ CONFIG="${1?}"
 VERSION="${2?}"
 
 cmake opencv -B build_$1 \
-  -GXcode \
   -DCMAKE_INSTALL_PREFIX=/usr/local \
   -DCMAKE_BUILD_TYPE=$1 \
   -DBUILD_TYPE=$1 \
@@ -79,8 +78,14 @@ cmake opencv -B build_$1 \
   -DWITH_OPENCL=OFF \
   -DWITH_IPP=OFF
 
-cmake --build "build_$CONFIG" --config $CONFIG
-cmake --install "build_$CONFIG" --prefix "release/$CONFIG" --config $CONFIG
+cmake --build "build_$CONFIG"
+cmake --install "build_$CONFIG" --prefix "release/$CONFIG"
+
+cmake opencv/3rdparty/libpng -B build_libpng_arm -DCMAKE_OSX_ARCHITECTURES="arm64"
+cmake --build build_libpng_arm
+lipo -create build_libpng_arm/liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a -output ./liblibpng.a
+mv ./liblibpng.a release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
+lipo -info release/$CONFIG/lib/opencv4/3rdparty/liblibpng.a
 
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
 
