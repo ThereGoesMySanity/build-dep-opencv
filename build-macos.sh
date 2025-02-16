@@ -162,7 +162,7 @@ for file in $(find); do
   echo Combining $file
   if [[ -d "$file" ]]; then
     mkdir "../../release/$CONFIG/$file"
-  elif [[ "$file" =~ \\.a$ ]]
+  elif [[ "$file" =~ \\.a$ ]]; then
     lipo -create "$file" "../../release-x86/$CONFIG/$file" -output "../../release/$CONFIG/$file"
   else
     cp $file "../../release/$CONFIG/$file"
