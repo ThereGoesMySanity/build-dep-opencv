@@ -4,9 +4,6 @@ set -euo pipefail
 CONFIG="${1?}"
 VERSION="${2?}"
 
-if [[ "./lib/libopencv_core.a" =~ ".a\$" ]]; then
-  echo "test!"
-fi
 
 cmake opencv -B build_x86_$1 \
   -DCMAKE_OSX_ARCHITECTURES="x86_64" \
@@ -159,22 +156,19 @@ cmake --build "build_arm_$CONFIG"
 cmake --install "build_arm_$CONFIG" --prefix "release-arm/$CONFIG"
 
 
-mkdir "release"
-mkdir "release/$CONFIG"
-cd "release-arm/$CONFIG"
-for file in $(find ./*); do
-  if [[ -d "$file" ]]; then
-    mkdir "../../release/$CONFIG/$file"
-  elif [[ "$file" =~ ".a\$" ]]; then
-    echo Combining $file
-    lipo -create "$file" "../../release-x86/$CONFIG/$file" -output "../../release/$CONFIG/$file"
-  else
-    echo Copying $file
-    cp $file "../../release/$CONFIG/$file"
-  fi
-done
-cd ../..
+mkdir release
+cp -r release-arm/$CONFIG release/
 
+for file in lib/libopencv_photo.a \
+  lib/libopencv_core.a \
+  lib/libopencv_imgcodecs.a \
+  lib/libopencv_imgproc.a \
+  lib/opencv4/3rdparty/liblibpng.a \
+  lib/opencv4/3rdparty/libzlib.a; do
+  rm release/$CONFIG/$file
+  lipo -create "release-arm/$CONFIG/$file" "release-x86/$CONFIG/$file" -output "release/$CONFIG/$file"
+  
+done
 
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
 
