@@ -165,9 +165,9 @@ for file in lib/libopencv_photo.a \
   lib/libopencv_imgproc.a \
   lib/opencv4/3rdparty/liblibpng.a \
   lib/opencv4/3rdparty/libzlib.a; do
+  echo Combining $file
   rm release/$CONFIG/$file
   lipo -create "release-arm/$CONFIG/$file" "release-x86/$CONFIG/$file" -output "release/$CONFIG/$file"
-  
 done
 
 tar -C "release/$CONFIG" -cvf "release/opencv-macos-$VERSION-$CONFIG.tar.gz" .
