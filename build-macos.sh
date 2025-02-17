@@ -4,6 +4,10 @@ set -euo pipefail
 CONFIG="${1?}"
 VERSION="${2?}"
 
+if [[ "./lib/libopencv_core.a" =~ ".a$" ]]; then
+  echo "test!"
+fi
+
 cmake opencv -B build_x86_$1 \
   -DCMAKE_OSX_ARCHITECTURES="x86_64" \
   -DCMAKE_INSTALL_PREFIX=/usr/local \
