@@ -161,10 +161,11 @@ cd "release-arm/$CONFIG"
 for file in $(find ./*); do
   if [[ -d "$file" ]]; then
     mkdir "../../release/$CONFIG/$file"
-  elif [[ "$file" =~ "\.a$" ]]; then
+  elif [[ "$file" =~ ".a$" ]]; then
     echo Combining $file
     lipo -create "$file" "../../release-x86/$CONFIG/$file" -output "../../release/$CONFIG/$file"
   else
+    echo Copying $file
     cp $file "../../release/$CONFIG/$file"
   fi
 done
