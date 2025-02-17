@@ -4,7 +4,7 @@ set -euo pipefail
 CONFIG="${1?}"
 VERSION="${2?}"
 
-if [[ "./lib/libopencv_core.a" =~ ".a$" ]]; then
+if [[ "./lib/libopencv_core.a" =~ ".a\$" ]]; then
   echo "test!"
 fi
 
@@ -165,7 +165,7 @@ cd "release-arm/$CONFIG"
 for file in $(find ./*); do
   if [[ -d "$file" ]]; then
     mkdir "../../release/$CONFIG/$file"
-  elif [[ "$file" =~ ".a$" ]]; then
+  elif [[ "$file" =~ ".a\$" ]]; then
     echo Combining $file
     lipo -create "$file" "../../release-x86/$CONFIG/$file" -output "../../release/$CONFIG/$file"
   else
